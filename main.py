@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-class Idk():
+class Mapper():
     def __init__(self, file_name, remove_zeroes=False) -> None:
         self.file = rasterio.open(f'data/{file_name}')
         self.dataset = self.file.read(1)
@@ -26,21 +26,23 @@ class Idk():
         """
         self.dataset = self.file.read(1, window=Window(col_off, row_off, width, height))
     
-    def imshow(self, cmap: int | str = 0, norm='log'):
+    def imshow_dataset(self, cmap = 'gist_earth', norm = 'log'):
         """Calls the matplotlib imshow method with preset variables.
 
         Args:
-            cmap (int | str, optional): plt.imshow cmap var. Defaults to 0.
-            norm (str, optional): plt.imshow norm var. Defaults to 'log'.
+            cmap (int | str, optional): plt.imshow cmap variable. An int input selects a recommended cmap. Defaults to 'gist_earth'.
+            norm (str, optional): plt.imshow norm variable. Defaults to 'log'.
         """
         if isinstance(cmap, int):
             cmap = ['gist_earth', 'gray', 'terrain'][cmap]
-        
         plt.imshow(self.dataset, cmap=cmap, norm=norm)
+            
+    def imshow_gradient(self, cmap = 'seismic', norm = 'linear'):
+        plt.imshow(np.gradient(self.dataset)[0], cmap=cmap, norm=norm)
+    
 
+italy = Mapper('30N000E_20101117_gmted_mea075.tif')
 
-italy = Idk('30N000E_20101117_gmted_mea300.tif')
-
-italy.imshow()
+italy.imshow_gradient()
 
 plt.show()
