@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Big files
+data/30N000E_20101117_gmted_mea075.tif
