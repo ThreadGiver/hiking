@@ -5,7 +5,7 @@ import numpy as np
 
 
 class Mapper():
-    def __init__(self, file_name, remove_zeroes=False) -> None:
+    def __init__(self, file_name, remove_zeroes=False, min_zero=True) -> None:
         self.file = rasterio.open(f'data/{file_name}')
         self.dataset = self.file.read(1)
         self.height = self.dataset.shape[0]
@@ -13,6 +13,9 @@ class Mapper():
 
         if remove_zeroes:
             self.dataset = np.ma.masked_where(self.dataset == 0, self.dataset)
+        
+        if min_zero:
+            self.dataset[self.dataset < 0] = 0
 
 
     def crop(self, col_off: int, row_off: int, width: int, height: int):
@@ -43,6 +46,6 @@ class Mapper():
 
 italy = Mapper('30N000E_20101117_gmted_mea075.tif')
 
-italy.imshow_gradient()
+italy.imshow_dataset()
 
 plt.show()
