@@ -1,0 +1,3 @@
+grand canyon: https://pubs.usgs.gov/ds/121/grand/geophys/gc_dem.zip
+
+world map: https://topotools.cr.usgs.gov/gmted_viewer/viewer.htm
