@@ -51,7 +51,7 @@ def heuristic_cost(a, b):
 
 coordinates = tuple[int, int]
 def a_star(start_node: coordinates, end_node: coordinates, 
-           array: list[list[int]], wall_values: tuple[int] = 1) -> list[coordinates]:
+           array: list[list[int]], wall_values: tuple[int] = (0,)) -> list[coordinates]:
     """A* pathfinding from start_node to end_node in an array.
     Args:
         start_node (tuple of int): starting coordinates.

@@ -51,31 +51,12 @@ class Mapper():
     def imshow_gradient(self, cmap = 'seismic', norm = 'linear', vmin = None):
         plt.imshow(np.gradient(self.dataset)[0], cmap=cmap, norm=norm, vmin=vmin)
     
-x = 1000
-y = 1000
-select_map = Mapper('gc_dem.tif')
 
-path = pathing.a_star((1400,1900), (960,370), select_map.dataset, (0, ))
-
-pathTransposed = np.array(path).T.tolist()
-
-# select_map2 = Mapper('30N000E_20101117_gmted_mea300.tif')
-
-# idk = np.full(select_map2.dataset.shape, np.nan)
-# select_map2.dataset[:] = 0
-# select_map2.dataset[0] = np.nan
-# select_map2.dataset[tuple(pathTransposed)] = 10000
-
-idk = np.zeros(select_map.dataset.shape)
-idk[tuple(pathTransposed)] = 1
-
+select_map = Mapper('30N000E_20101117_gmted_mea300.tif')
 select_map.imshow_dataset()
 
-
-# c_white = mpl.colors.colorConverter.to_rgba('yellow',alpha = 0.01)
-# c_black= mpl.colors.colorConverter.to_rgba('red',alpha = 1)
-# cmap_rb = mpl.colors.LinearSegmentedColormap.from_list('rb_cmap',[c_white,c_black],2)
-
-# plt.imshow(idk, 'hsv', alpha=0.5)
+path = pathing.a_star((1400,1900), (960,370), select_map.dataset)
+path_transposed = np.array(path).T.tolist()
+plt.plot(path_transposed[1], path_transposed[0], c='r')
 
 plt.show()
