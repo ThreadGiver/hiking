@@ -4,8 +4,11 @@ import pathing
 from mapper import Mapper
 
 
+def walk_speed(slope):
+    return 6 * ( np.e ** (-3.5 * abs(slope + 0.05)) )
+
 select_map = Mapper('italy300')
-select_map.imshow_dataset()
+select_map.imshow_gradient()
 
 path = pathing.a_star((1400,1900), (960,370), select_map.dataset)
 path_transposed = np.array(path).T.tolist()
