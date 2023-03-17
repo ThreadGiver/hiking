@@ -9,7 +9,14 @@ import pathing
 
 class Mapper():
     def __init__(self, file_name, remove_zeroes=False, min_zero=True) -> None:
-        self.file = rasterio.open(f'data/{file_name}')
+        file_ref = {
+            'italy300': '30N000E_20101117_gmted_mea300.tif',
+            'italy075': '30N000E_20101117_gmted_mea075.tif',
+            'midUS300': '30N120W_20101117_gmted_mea300.tif',
+            'midUS075': '30N120W_20101117_gmted_mea075.tif',
+            'grand_canyon': 'gc_dem.tif'
+        }
+        self.file = rasterio.open(f'data/{file_ref.get(file_name, file_name)}')
         self.dataset = self.file.read(1)
         self.height = self.dataset.shape[0]
         self.width = self.dataset.shape[1]
@@ -52,7 +59,7 @@ class Mapper():
         plt.imshow(np.gradient(self.dataset)[0], cmap=cmap, norm=norm, vmin=vmin)
     
 
-select_map = Mapper('30N000E_20101117_gmted_mea300.tif')
+select_map = Mapper('italy300')
 select_map.imshow_dataset()
 
 path = pathing.a_star((1400,1900), (960,370), select_map.dataset)
