@@ -1,11 +1,15 @@
 import queue
 
 
-def neighbors(center_node: tuple[int], array: list[list[int]],
-              excluded_values: tuple[int]) -> set:
-    """Returns the neighbors of a node in a an array.
+coords = tuple[int, int]
+
+
+def array_neighbors(center_node: coords,
+                    array: list[list[int|float]],
+                    excluded_values: tuple) -> set:
+    """Returns the neighbors nodes of a node in a an array.
     Args:
-        center_node (tuple[int]): The node whose neighbors are to be returned.
+        center_node (coords): The node whose neighbors are to be returned.
         array (list[list[int]]): The array in which the nodes are.
         excluded_values (tuple): Values which exclude a node from being a neighbor.
     Returns:
@@ -21,13 +25,12 @@ def neighbors(center_node: tuple[int], array: list[list[int]],
             pass
     return neighbors_set
 
-def breadth_first_map(array, start_node, wall_values: tuple[int]):
+def breadth_first_map(array, start_node: coords, unreachable_values: tuple):
     """Explores an array
     Args:
         array (list[list[int]]): Array to explore.
         start_node ([type]): A reachable node.
-        wall_values (tuple[int], optional): Values which exclude a node from 
-            being a neighbor.
+        unreachable_values (tuple[int], optional): Values which can't be reached.
     Returns:
         set: Reachable nodes.
     """
@@ -37,7 +40,7 @@ def breadth_first_map(array, start_node, wall_values: tuple[int]):
 
     while not nodes_to_explore.empty():
         current_node = nodes_to_explore.get()
-        for new_node in neighbors(current_node, array, wall_values):
+        for new_node in array_neighbors(current_node, array, unreachable_values):
             if new_node not in explored_nodes:
                 nodes_to_explore.put(new_node)
             explored_nodes.add(current_node)
@@ -49,15 +52,17 @@ def breadth_first_map(array, start_node, wall_values: tuple[int]):
 def heuristic_cost(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
-coordinates = tuple[int, int]
-def a_star(start_node: coordinates, end_node: coordinates, 
-           array: list[list[int]], wall_values: tuple[int] = (0,)) -> list[coordinates]:
+def a_star(start_node: coords, 
+           end_node: coords, 
+           array: list[list[int|float]],
+           unreachable_values: tuple = (0,)
+           ) -> list[coords]:
     """A* pathfinding from start_node to end_node in an array.
     Args:
         start_node (tuple of int): starting coordinates.
         end_node (tuple of int): goal coordinates.
-        array (list of lists): array to pathfind through
-        wall_values (tuple of int) : node values in the array that can't be navigated.
+        array (list of lists): array to pathfind through.
+        unreachable_values (tuple of int) : node values in the array that can't be navigated.
     Returns:
         list: list of node coordinates from (including) start_node to (including) end_node.
     """
@@ -70,9 +75,9 @@ def a_star(start_node: coordinates, end_node: coordinates,
 
     while not nodes_to_explore.empty():
         current_node = nodes_to_explore.get()
-        for new_node in neighbors(current_node[1], array, wall_values):
+        for new_node in array_neighbors(current_node[1], array, unreachable_values):
             new_g_cost = g_cost[current_node[1]] + 1
-            if new_node not in g_cost or new_g_cost < g_cost[new_node]:
+            if (new_node not in g_cost) or (new_g_cost < g_cost[new_node]):
                 g_cost[new_node] = new_g_cost
                 nodes_to_explore.put((new_g_cost + heuristic_cost(end_node, new_node),
                                       new_node))
