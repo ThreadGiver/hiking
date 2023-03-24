@@ -51,5 +51,5 @@ class Mapper():
             cmap = ['gist_earth', 'gray', 'terrain'][cmap]
         plt.imshow(self.dataset, cmap=cmap, norm=norm, vmin=vmin)
             
-    def imshow_gradient(self, cmap = 'seismic', norm = 'linear', vmin = None):
-        plt.imshow(np.gradient(self.dataset)[0], cmap=cmap, norm=norm, vmin=vmin)
+    def imshow_gradient(self, axis = 0, cmap = 'seismic', norm = 'linear', vmin = None, alpha = 1):
+        plt.imshow(np.gradient(self.dataset)[axis], cmap=cmap, norm=norm, vmin=vmin, alpha=alpha)
