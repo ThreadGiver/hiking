@@ -146,3 +146,54 @@ def gradient_a_star(start_node: coords,
         path.append(active_node)
     path.reverse()
     return path
+
+
+def time_a_star(start_node: coords, 
+           end_node: coords, 
+           array: list[list[int|float]],
+           unreachable_values: tuple = (0,)
+           ) -> list[coords]:
+    """A* pathfinding from start_node to end_node in an array.
+    Args:
+        start_node (tuple of int): starting coordinates.
+        end_node (tuple of int): goal coordinates.
+        array (list of lists): array to pathfind through.
+        unreachable_values (tuple of int) : node values in the array that can't be navigated.
+    Returns:
+        list: list of node coordinates from (including) start_node to (including) end_node.
+    """
+    nodes_to_explore = queue.PriorityQueue()
+    origin_node = dict()
+    g_cost = dict()  # g cost: # of moves from the start_node
+    nodes_to_explore.put((0, start_node))
+    origin_node[start_node] = None
+    g_cost[start_node] = 0
+
+    while not nodes_to_explore.empty():
+        current_node = nodes_to_explore.get()
+        for new_node in array_neighbors(current_node[1], array, unreachable_values):
+            new_g_cost = ( g_cost[current_node[1]] 
+                         + array[current_node[1][0]][current_node[1][1]]
+                         )
+                        
+                        # This value of 800 represents a rough estimate of dx for the italy map.
+                        # it should also be noted that this currently only uses the y gradient
+                        # instead of the y or x gradient depending on the movement.
+                        # Also, it's currently quite slow since it computes the cost at every cell.
+                        # A faster alternative to look into is to use the faster numpy matrix
+                        # operations to precompute the costs.  
+            if (new_node not in g_cost) or (new_g_cost < g_cost[new_node]):
+                g_cost[new_node] = new_g_cost
+                nodes_to_explore.put((new_g_cost + heuristic_cost(end_node, new_node),
+                                      new_node))
+                origin_node[new_node] = current_node[1]
+        if current_node[1] == end_node:
+            break
+    
+    active_node = end_node
+    path = [active_node]
+    while active_node != start_node:
+        active_node = origin_node[active_node]
+        path.append(active_node)
+    path.reverse()
+    return path
