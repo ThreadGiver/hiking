@@ -1,5 +1,6 @@
 import queue
 import numpy as np
+import time
 
 
 coords = tuple[int, int]
@@ -52,6 +53,9 @@ def breadth_first_map(array, start_node: coords, unreachable_values: tuple):
 
 def heuristic_cost(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+def heuristic_cost2(a, b):
+    return (abs(a[0] - b[0]) + abs(a[1] - b[1]))/100
 
 def a_star(start_node: coords, 
            end_node: coords, 
@@ -118,12 +122,13 @@ def gradient_a_star(start_node: coords,
     origin_node[start_node] = None
     g_cost[start_node] = 0
 
+
     while not nodes_to_explore.empty():
         current_node = nodes_to_explore.get()
         for new_node in array_neighbors(current_node[1], array, unreachable_values):
             new_g_cost = (g_cost[current_node[1]] 
-                         + (800 / walk_speed(
-                            array[current_node[1][0]][current_node[1][1]] / 800
+                         + (0.800 / walk_speed(
+                            array[current_node[1][0], current_node[1][1]] / 800
                          ))) 
                         # This value of 800 represents a rough estimate of dx for the italy map.
                         # it should also be noted that this currently only uses the y gradient
@@ -133,12 +138,12 @@ def gradient_a_star(start_node: coords,
                         # operations to precompute the costs.  
             if (new_node not in g_cost) or (new_g_cost < g_cost[new_node]):
                 g_cost[new_node] = new_g_cost
-                nodes_to_explore.put((new_g_cost + heuristic_cost(end_node, new_node),
+                nodes_to_explore.put((new_g_cost + heuristic_cost2(end_node, new_node),
                                       new_node))
                 origin_node[new_node] = current_node[1]
         if current_node[1] == end_node:
             break
-    
+        
     active_node = end_node
     path = [active_node]
     while active_node != start_node:
@@ -173,9 +178,8 @@ def time_a_star(start_node: coords,
         current_node = nodes_to_explore.get()
         for new_node in array_neighbors(current_node[1], array, unreachable_values):
             new_g_cost = ( g_cost[current_node[1]] 
-                         + array[current_node[1][0]][current_node[1][1]]
+                         + array[current_node[1][0], current_node[1][1]]
                          )
-                        
                         # This value of 800 represents a rough estimate of dx for the italy map.
                         # it should also be noted that this currently only uses the y gradient
                         # instead of the y or x gradient depending on the movement.
@@ -184,7 +188,7 @@ def time_a_star(start_node: coords,
                         # operations to precompute the costs.  
             if (new_node not in g_cost) or (new_g_cost < g_cost[new_node]):
                 g_cost[new_node] = new_g_cost
-                nodes_to_explore.put((new_g_cost + heuristic_cost(end_node, new_node),
+                nodes_to_explore.put((new_g_cost + heuristic_cost2(end_node, new_node),
                                       new_node))
                 origin_node[new_node] = current_node[1]
         if current_node[1] == end_node:
