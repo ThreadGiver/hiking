@@ -22,9 +22,6 @@ class Mapper():
 
         if remove_zeroes:
             self.dataset = np.ma.masked_where(self.dataset == 0, self.dataset)
-        
-        if replace_zeroes:
-            self.dataset[self.dataset == 0] = 100000
 
 
     def crop(self, col_off: int, row_off: int, width: int, height: int):
