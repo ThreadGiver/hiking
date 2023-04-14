@@ -16,59 +16,39 @@ def gradient_to_time(array, dx=800):
     return output
 
 
-end_coords = (600, 300)
-select_map = Mapper('italy300', remove_zeroes=True)
+# end_coords = (600, 300)
+# end_coords = (700, 500)
+end_coords = (1400, 1900)
+start_coords = (960,370)
 
-# print(select_map.dataset)
-# print()
-# print(np.gradient(select_map.dataset)[0])
-# print()
-# print(gradient_to_time(np.gradient(select_map.dataset)[0]))
-# print()
-select_map.imshow_dataset()
-
-# print(gradient_to_time(np.gradient(select_map.dataset)[0]))
 
 # (1620,2692)
 # (1400,1900)
 # (960,370)
 
-time0 = time.time()
-dataset = gradient_to_time(np.gradient(select_map.dataset)[0])
-time1 = time.time()
-print(time1-time0)
-
-path = pathing.time_a_star(end_coords, (960,370), dataset)
-path_transposed = np.array(path).T.tolist()
-plt.plot(path_transposed[1], path_transposed[0], c='r')
-time2 = time.time()
-print(time2-time1)
-
-plt.show()
-
-select_map = Mapper('italy300')
+select_map = Mapper('italy300', replace_zeroes=True)
 select_map.imshow_dataset()
 
-time3 = time.time()
+time6 = time.time()
 dataset = gradient_to_time(np.gradient(select_map.dataset)[0])
-time4 = time.time()
-print(time4-time3)
+time7 = time.time()
+print(time7-time6, 'prep time A star - replace zeroes')
 
-
-path = pathing.time_a_star(end_coords, (960,370), dataset)
+path = pathing.time_a_star(end_coords, start_coords, dataset)
 path_transposed = np.array(path).T.tolist()
 plt.plot(path_transposed[1], path_transposed[0], c='r')
-time5 = time.time()
-print(time5-time4)
+time8 = time.time()
+print(time8-time7, 'time A star - replace zeroes - r')
+
 
 select_map = Mapper('italy300')
 select_map.imshow_dataset()
 dataset = np.gradient(select_map.dataset)[0]
 
-time6 = time.time()
-path = pathing.gradient_a_star(end_coords, (960,370), dataset)
+time9 = time.time()
+path = pathing.gradient_a_star(end_coords, start_coords, dataset)
 path_transposed = np.array(path).T.tolist()
-plt.plot(path_transposed[1], path_transposed[0], c='r')
-time7 = time.time()
-print(time7-time6)
+plt.plot(path_transposed[1], path_transposed[0], c='c')
+time10 = time.time()
+print(time10-time9, 'gradient A star - c')
 plt.show()

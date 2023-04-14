@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class Mapper():
-    def __init__(self, file_name, remove_zeroes=False, min_zero=True) -> None:
+    def __init__(self, file_name, remove_zeroes=False, min_zero=True, replace_zeroes=False) -> None:
         file_ref = {
             'italy300': '30N000E_20101117_gmted_mea300.tif',
             'italy075': '30N000E_20101117_gmted_mea075.tif',
@@ -17,11 +17,14 @@ class Mapper():
         self.height = self.dataset.shape[0]
         self.width = self.dataset.shape[1]
 
+        if min_zero:
+            self.dataset[self.dataset < 0] = 0
+
         if remove_zeroes:
             self.dataset = np.ma.masked_where(self.dataset == 0, self.dataset)
         
-        if min_zero:
-            self.dataset[self.dataset < 0] = 0
+        if replace_zeroes:
+            self.dataset[self.dataset == 0] = 100000
 
 
     def crop(self, col_off: int, row_off: int, width: int, height: int):
