@@ -3,7 +3,6 @@ import numpy as np
 import pathing
 from mapper import Mapper
 
-import time
 
 italy_coords = [
     (1400, 1900),
@@ -16,20 +15,19 @@ italy_coords = [
 canyon_coords = [
     (3800, 1900),
     (3400, 2100),
-    (3200, 2500)
+    (3200, 2500),
+    (2500, 3900),
+    (3200, 5100)
 ]
 
 start_coords = canyon_coords[0]
-end_coords = canyon_coords[2]
+end_coords = canyon_coords[3]
 
 select_map = Mapper('grand_canyon')
 select_map.imshow_dataset()
 dataset = np.gradient(select_map.dataset)[0]
 
-time1 = time.time()
 path = pathing.gradient_a_star(start_coords, end_coords, dataset)
 path_transposed = np.array(path).T.tolist()
 plt.plot(path_transposed[1], path_transposed[0], c='r')
-time2 = time.time()
-print(time2-time1, 'gradient A star - r')
 plt.show()
