@@ -26,6 +26,33 @@ def array_neighbors(center_node: coords,
             pass
     return neighbors_set
 
+def directional_array_neighbors(center_node: coords,
+                    array: list[list[int|float]],
+                    excluded_values: tuple) -> set:
+    """Returns the neighbors nodes of a node in a an array.
+    Args:
+        center_node (coords): The node whose neighbors are to be returned.
+        array (list[list[int]]): The array in which the nodes are.
+        excluded_values (tuple): Values which exclude a node from being a neighbor.
+    Returns:
+        set: The immediate neighbors of allowed values.
+    """
+    x, y = center_node
+    neighbors_set = set()
+    for i, j in ((x, y-1), (x, y+1)):
+        try:
+            if array[0][i][j] not in excluded_values:
+                neighbors_set.add((i, j))
+        except:
+            pass
+    for i, j in ((x-1, y), (x+1, y)):
+        try:
+            if array[1][i][j] not in excluded_values:
+                neighbors_set.add((i, j))
+        except:
+            pass
+    return neighbors_set
+
 def breadth_first_map(array, start_node: coords, unreachable_values: tuple):
     """Explores an array
     Args:
@@ -160,7 +187,7 @@ def axis_finder(current_node, new_node):
 
 def directional_gradient_a_star(start_node: coords, 
            end_node: coords, 
-           array: list[list[int|float]],
+           array: list[list[list[int|float]]],
            unreachable_values: tuple = (0,)
            ) -> list[coords]:
     """A* pathfinding from start_node to end_node in an array.
@@ -182,11 +209,11 @@ def directional_gradient_a_star(start_node: coords,
 
     while not nodes_to_explore.empty():
         current_node = nodes_to_explore.get()
-        for new_node in array_neighbors(current_node[1], array, unreachable_values):
-            print(axis_finder(current_node[1], new_node))
+        for new_node in directional_array_neighbors(current_node[1], array, unreachable_values):
+            axis = axis_finder(current_node[1], new_node)
             new_g_cost = (g_cost[current_node[1]] 
                           + (0.800 / walk_speed(
-                                array[current_node[1][0], current_node[1][1]] / 800
+                                array[axis][current_node[1][0], current_node[1][1]] / 800
                             ))
                          ) 
                         # This value of 800 represents a rough estimate of dx for the italy map.
