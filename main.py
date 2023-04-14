@@ -21,13 +21,13 @@ canyon_coords = [
 ]
 
 start_coords = canyon_coords[0]
-end_coords = canyon_coords[3]
+end_coords = canyon_coords[2]
 
 select_map = Mapper('grand_canyon')
 select_map.imshow_dataset()
 dataset = np.gradient(select_map.dataset)[0]
 
-path = pathing.gradient_a_star(start_coords, end_coords, dataset)
+path = pathing.directional_gradient_a_star(start_coords, end_coords, dataset)
 path_transposed = np.array(path).T.tolist()
 plt.plot(path_transposed[1], path_transposed[0], c='r')
 plt.show()
