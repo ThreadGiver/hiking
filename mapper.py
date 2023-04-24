@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class Mapper():
-    def __init__(self, file_name, remove_zeroes=False, min_zero=True, replace_zeroes=False) -> None:
+    def __init__(self, file_name, remove_zeroes=False, min_zero=True) -> None:
         file_ref = {
             'italy300': '30N000E_20101117_gmted_mea300.tif',
             'italy075': '30N000E_20101117_gmted_mea075.tif',

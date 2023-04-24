@@ -27,16 +27,36 @@ canyon_coords = [
     (3600, 2000)
 ]
 
-start_coords = italy300_coords[1]
-end_coords = italy300_coords[0]
+start_coords = italy300_coords[0]
+end_coords = italy300_coords[1]
 
 select_map = Mapper('italy300')
 select_map.imshow_dataset()
 
 dataset = np.gradient(select_map.dataset)
 
-path = pathing.directional_gradient_a_star(start_coords, end_coords, dataset)
+t1 = time()
+path = pathing.a_star(start_coords, end_coords, dataset, h_factor=10)
 path_transposed = np.array(path).T.tolist()
 plt.plot(path_transposed[1], path_transposed[0], c='r')
+print(time()-t1, 'r 10')
+
+t2 = time()
+path = pathing.a_star(start_coords, end_coords, dataset, h_factor=100)
+path_transposed = np.array(path).T.tolist()
+plt.plot(path_transposed[1], path_transposed[0], c='c')
+print(time()-t2, 'c 100')
+
+t3 = time()
+path = pathing.a_star(start_coords, end_coords, dataset, h_factor=5)
+path_transposed = np.array(path).T.tolist()
+plt.plot(path_transposed[1], path_transposed[0], c='g')
+print(time()-t3, 'g 5')
+
+t4 = time()
+path = pathing.a_star(start_coords, end_coords, dataset, h_factor=1)
+path_transposed = np.array(path).T.tolist()
+plt.plot(path_transposed[1], path_transposed[0], c='b')
+print(time()-t4, 'b 1')
 
 plt.show()

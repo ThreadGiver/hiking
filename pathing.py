@@ -5,9 +5,11 @@ import numpy as np
 coords = tuple[int, int]
 
 
-def directional_array_neighbors(center_node: coords,
-                    array: list[list[int|float]],
-                    excluded_values: tuple) -> set:
+def directional_array_neighbors(
+        center_node: coords,
+        array: list[list[int|float]],
+        excluded_values: tuple
+        ) -> set:
     """Returns the neighbors nodes of a node in a an array.
     Args:
         center_node (coords): The node whose neighbors are to be returned.
@@ -35,10 +37,6 @@ def directional_array_neighbors(center_node: coords,
 def heuristic_cost(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
-
-def walk_speed(slope):
-    return 6 * ( np.e ** (-3.5 * abs(slope + 0.05)) )
-
 def walk_time(dh, dx):
     """How much time it takes to walk according to dh and dx.
 
@@ -53,26 +51,32 @@ def walk_time(dh, dx):
 
 
 def axis_finder(current_node, new_node):
+    """Identify on which axis is the delta
+
+    Returns:
+        int: The delta axis
+    """
     if current_node[0] - new_node[0]:
         return 0
     else:
         return 1
 
-def a_star(start_node: coords, 
-           end_node: coords, 
-           array: list[list[list[int|float]]],
-           unreachable_values: tuple = (0,),
-           h_cost_divider = 100,
-           dx = 800
-           ) -> list[coords]:
-    """A* pathfinding from start_node to end_node in an array.
+def a_star(
+        start_node: coords, 
+        end_node: coords, 
+        array: list[list[list[int|float]]],
+        unreachable_values: tuple = (0,),
+        h_factor = 100,
+        dx = 800
+        ) -> list[coords]:
+    """A* pathfinding from start_node to end_node in array.
     Args:
         start_node (tuple of int): starting coordinates.
         end_node (tuple of int): goal coordinates.
         array (list of lists): array to pathfind through.
         unreachable_values (tuple of int) : node values in the array that can't be navigated.
-        h_cost_divider (int) : divides the estimated cost by this number.
-        dx (in or float) : real life distance between two cells.
+        h_factor (int) : divides the estimated cost by this number.
+        dx (int or float) : real life distance between two cells.
     Returns:
         list: list of node coordinates from (including) start_node to (including) end_node.
     """
@@ -97,7 +101,7 @@ def a_star(start_node: coords,
             if (new_node not in g_cost) or (new_g_cost < g_cost[new_node]):
                 g_cost[new_node] = new_g_cost
                 nodes_to_explore.put((
-                    new_g_cost + heuristic_cost(end_node, new_node)/h_cost_divider,
+                    new_g_cost + heuristic_cost(end_node, new_node)/h_factor,
                     new_node
                 ))
                 origin_node[new_node] = current_node[1]
