@@ -3,7 +3,6 @@ import numpy as np
 import pathing
 from mapper import Mapper
 
-from time import time
 
 italy300_coords = [
     (1400, 1900), # Ceramida, Italy - end
@@ -35,28 +34,8 @@ select_map.imshow_dataset()
 
 dataset = np.gradient(select_map.dataset)
 
-t1 = time()
-path = pathing.a_star(start_coords, end_coords, dataset, h_factor=10)
+path = pathing.a_star(start_coords, end_coords, dataset)
 path_transposed = np.array(path).T.tolist()
 plt.plot(path_transposed[1], path_transposed[0], c='r')
-print(time()-t1, 'r 10')
-
-t2 = time()
-path = pathing.a_star(start_coords, end_coords, dataset, h_factor=100)
-path_transposed = np.array(path).T.tolist()
-plt.plot(path_transposed[1], path_transposed[0], c='c')
-print(time()-t2, 'c 100')
-
-t3 = time()
-path = pathing.a_star(start_coords, end_coords, dataset, h_factor=5)
-path_transposed = np.array(path).T.tolist()
-plt.plot(path_transposed[1], path_transposed[0], c='g')
-print(time()-t3, 'g 5')
-
-t4 = time()
-path = pathing.a_star(start_coords, end_coords, dataset, h_factor=1)
-path_transposed = np.array(path).T.tolist()
-plt.plot(path_transposed[1], path_transposed[0], c='b')
-print(time()-t4, 'b 1')
 
 plt.show()

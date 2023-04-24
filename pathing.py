@@ -66,7 +66,7 @@ def a_star(
         end_node: coords, 
         array: list[list[list[int|float]]],
         unreachable_values: tuple = (0,),
-        h_factor = 100,
+        h_factor = 10,
         dx = 800
         ) -> list[coords]:
     """A* pathfinding from start_node to end_node in array.
@@ -76,7 +76,7 @@ def a_star(
         array (list of lists): array to pathfind through.
         unreachable_values (tuple of int) : node values in the array that can't be navigated.
         h_factor (int) : divides the estimated cost by this number.
-        dx (int or float) : real life distance between two cells.
+        dx (int or float) : real life distance between two cells. Default based on italy map.
     Returns:
         list: list of node coordinates from (including) start_node to (including) end_node.
     """
