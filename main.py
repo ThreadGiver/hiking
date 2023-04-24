@@ -39,8 +39,4 @@ path = pathing.directional_gradient_a_star(start_coords, end_coords, dataset)
 path_transposed = np.array(path).T.tolist()
 plt.plot(path_transposed[1], path_transposed[0], c='r')
 
-path = pathing.directional_gradient_a_star1(start_coords, end_coords, dataset)
-path_transposed = np.array(path).T.tolist()
-plt.plot(path_transposed[1], path_transposed[0], c='c')
-
 plt.show()
