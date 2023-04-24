@@ -22,6 +22,9 @@ class Mapper():
 
         if remove_zeroes:
             self.dataset = np.ma.masked_where(self.dataset == 0, self.dataset)
+        
+        if file_name == 'grand_canyon':
+            self.crop(120, 117, 5940, 3693)
 
 
     def crop(self, col_off: int, row_off: int, width: int, height: int):
@@ -51,5 +54,9 @@ class Mapper():
             cmap = ['gist_earth', 'gray', 'terrain'][cmap]
         plt.imshow(self.dataset, cmap=cmap, norm=norm, vmin=vmin)
             
-    def imshow_gradient(self, axis = 0, cmap = 'seismic', norm = 'linear', vmin = None, alpha = 1):
-        plt.imshow(np.gradient(self.dataset)[axis], cmap=cmap, norm=norm, vmin=vmin, alpha=alpha)
+    def imshow_gradient(self, axis = None, cmap = 'seismic', norm = 'linear', vmin = None, alpha = 1):
+        if axis == None:
+            plt.imshow(np.gradient(self.dataset)[0], cmap=cmap, norm=norm, vmin=vmin, alpha=1)
+            plt.imshow(np.gradient(self.dataset)[1], cmap=cmap, norm=norm, vmin=vmin, alpha=0.5)
+        else:
+            plt.imshow(np.gradient(self.dataset)[axis], cmap=cmap, norm=norm, vmin=vmin, alpha=alpha)
