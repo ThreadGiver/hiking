@@ -38,7 +38,19 @@ def heuristic_cost(a, b):
 
 def walk_speed(slope):
     return 6 * ( np.e ** (-3.5 * abs(slope + 0.05)) )
-    # km/h
+
+def walk_time(dh, dx):
+    """How much time it takes to walk according to dh and dx.
+
+    Args:
+        dh (int or float): vertical delta in m 
+        dx (int or float): horizontal delta in m
+
+    Returns:
+        float: time in h
+    """
+    return (dx/1000) / (6 * ( np.e ** (-3.5 * abs(dh/dx + 0.05)) ))
+
 
 def axis_finder(current_node, new_node):
     if current_node[0] - new_node[0]:
@@ -46,7 +58,7 @@ def axis_finder(current_node, new_node):
     else:
         return 1
 
-def directional_gradient_a_star(start_node: coords, 
+def a_star(start_node: coords, 
            end_node: coords, 
            array: list[list[list[int|float]]],
            unreachable_values: tuple = (0,),
@@ -78,13 +90,7 @@ def directional_gradient_a_star(start_node: coords,
             axis = axis_finder(current_node[1], new_node)
             new_g_cost = (
                 g_cost[current_node[1]] 
-                + (
-                    (dx/1000) 
-                    / walk_speed(
-                        array[axis][current_node[1][0], current_node[1][1]] 
-                        / dx
-                    )
-                )
+                + walk_time(array[axis][current_node[1][0], current_node[1][1]], dx)
             ) 
             # it's currently quite slow since it computes the cost at every cell.
             # Precomputing the cost wasn't successful in improving performance.  
