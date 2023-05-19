@@ -59,7 +59,10 @@ def a_star(
         array (list of lists): array to pathfind through.
         h_factor (int) : divides the estimated cost by this number.
         dx (int or float) : real life distance between two cells. 
-                            Default based on italy300 map. Grand canyon is about 30.
+                            Default based on italy300 map. 
+                            Grand canyon is about 30.
+                            italy075 is about 200
+
     Returns:
         list: list of node coordinates from (including) start_node to (including) end_node.
     """
@@ -99,6 +102,6 @@ def a_star(
         active_node = origin_node[active_node]
         path.append(active_node)
     path.reverse()
-    print('Offroad: ' + round(g_cost[end_node] * 5/3, 2))
-    print('On trail: ' + round(g_cost[end_node], 2))
+    print('Offroad: ' + str(round(g_cost[end_node] * 5/3, 2)))
+    print('On trail: ' + str(round(g_cost[end_node], 2)))
     return path
