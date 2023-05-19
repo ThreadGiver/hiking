@@ -37,11 +37,9 @@ def heuristic_cost(a, b):
 
 def walk_time(dh, dx):
     """How much time it takes to walk according to dh and dx.
-
     Args:
         dh (int or float): vertical delta in m 
         dx (int or float): horizontal delta in m
-
     Returns:
         float: time in h
     """
@@ -52,8 +50,7 @@ def a_star(
         end_node: coords, 
         array: list[list[list[int|float]]],
         h_factor = 10,
-        dx = 800,
-        offroad = True
+        dx = 800
         ) -> list[coords]:
     """A* pathfinding from start_node to end_node in array.
     Args:
@@ -62,8 +59,7 @@ def a_star(
         array (list of lists): array to pathfind through.
         h_factor (int) : divides the estimated cost by this number.
         dx (int or float) : real life distance between two cells. 
-                            Default based on italy map. Grand canyon is about 30.
-        offroad (bool) : adjusts for offroad time if the itinerary is offroad
+                            Default based on italy300 map. Grand canyon is about 30.
     Returns:
         list: list of node coordinates from (including) start_node to (including) end_node.
     """
@@ -73,7 +69,6 @@ def a_star(
     nodes_to_explore.put((0, start_node))
     origin_node[start_node] = None
     g_cost[start_node] = 0
-
 
     while not nodes_to_explore.empty():
         current_node = nodes_to_explore.get()
@@ -104,8 +99,6 @@ def a_star(
         active_node = origin_node[active_node]
         path.append(active_node)
     path.reverse()
-    if offroad:
-        print(round(g_cost[end_node] * 5/3, 2))
-    else:
-        print(round(g_cost[end_node], 2))
+    print('Offroad: ' + round(g_cost[end_node] * 5/3, 2))
+    print('On trail: ' + round(g_cost[end_node], 2))
     return path

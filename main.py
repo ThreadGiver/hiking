@@ -24,15 +24,15 @@ canyon_coords = [
     (3600, 2000)
 ]
 
-start_coords = canyon_coords[2]
-end_coords = canyon_coords[0]
+start_coords = italy300_coords[0]
+end_coords = italy300_coords[1]
 
-select_map = Mapper('grand_canyon')
+select_map = Mapper('italy300')
 select_map.imshow_dataset()
 
 dataset = np.gradient(select_map.dataset)
 
-path = pathing.a_star(start_coords, end_coords, dataset, dx=20, h_factor=100)
+path = pathing.a_star(start_coords, end_coords, dataset, h_factor=100)
 path_transposed = np.array(path).T.tolist()
 plt.plot(path_transposed[1], path_transposed[0], c='r')
 
