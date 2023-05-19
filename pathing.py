@@ -67,7 +67,8 @@ def a_star(
         array: list[list[list[int|float]]],
         unreachable_values: tuple = (0,),
         h_factor = 10,
-        dx = 800
+        dx = 800,
+        offroad = True
         ) -> list[coords]:
     """A* pathfinding from start_node to end_node in array.
     Args:
@@ -76,7 +77,7 @@ def a_star(
         array (list of lists): array to pathfind through.
         unreachable_values (tuple of int) : node values in the array that can't be navigated.
         h_factor (int) : divides the estimated cost by this number.
-        dx (int or float) : real life distance between two cells. Default based on italy map.
+        dx (int or float) : real life distance between two cells. Default based on italy map. Grand canyon is about 30.
     Returns:
         list: list of node coordinates from (including) start_node to (including) end_node.
     """
@@ -114,5 +115,8 @@ def a_star(
         active_node = origin_node[active_node]
         path.append(active_node)
     path.reverse()
-    print(round(g_cost[end_node], 2))
+    if offroad:
+        print(round(g_cost[end_node] * 5/3, 2))
+    else:
+        print(round(g_cost[end_node], 2))
     return path
