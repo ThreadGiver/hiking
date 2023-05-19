@@ -7,14 +7,12 @@ coords = tuple[int, int]
 
 def directional_array_neighbors(
         center_node: coords,
-        array: list[list[int|float]],
-        excluded_values: tuple
+        array: list[list[int|float]]
         ) -> set:
     """Returns the neighbors nodes of a node in a an array.
     Args:
         center_node (coords): The node whose neighbors are to be returned.
         array (list[list[int]]): The array in which the nodes are.
-        excluded_values (tuple): Values which exclude a node from being a neighbor.
     Returns:
         set: The immediate neighbors of allowed values.
     """
@@ -22,13 +20,13 @@ def directional_array_neighbors(
     neighbors_set = set()
     for i, j in ((x, y-1), (x, y+1)):
         try:
-            if array[0][i][j] not in excluded_values:
+            if array[0][i][j] != 0:
                 neighbors_set.add((i, j))
         except:
             pass
     for i, j in ((x-1, y), (x+1, y)):
         try:
-            if array[1][i][j] not in excluded_values:
+            if array[1][i][j] != 0:
                 neighbors_set.add((i, j))
         except:
             pass
@@ -65,7 +63,6 @@ def a_star(
         start_node: coords, 
         end_node: coords, 
         array: list[list[list[int|float]]],
-        unreachable_values: tuple = (0,),
         h_factor = 10,
         dx = 800,
         offroad = True
@@ -75,9 +72,9 @@ def a_star(
         start_node (tuple of int): starting coordinates.
         end_node (tuple of int): goal coordinates.
         array (list of lists): array to pathfind through.
-        unreachable_values (tuple of int) : node values in the array that can't be navigated.
         h_factor (int) : divides the estimated cost by this number.
         dx (int or float) : real life distance between two cells. Default based on italy map. Grand canyon is about 30.
+        offroad (bool) : adjusts for offroad time if the itinerary is offroad
     Returns:
         list: list of node coordinates from (including) start_node to (including) end_node.
     """
@@ -91,7 +88,7 @@ def a_star(
 
     while not nodes_to_explore.empty():
         current_node = nodes_to_explore.get()
-        for new_node in directional_array_neighbors(current_node[1], array, unreachable_values):
+        for new_node in directional_array_neighbors(current_node[1], array):
             axis = axis_finder(current_node[1], new_node)
             new_g_cost = (
                 g_cost[current_node[1]] 
