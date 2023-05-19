@@ -47,18 +47,6 @@ def walk_time(dh, dx):
     """
     return (dx/1000) / (6 * ( np.e ** (-3.5 * abs(dh/dx + 0.05)) ))
 
-
-def axis_finder(current_node, new_node):
-    """Identify on which axis is the delta
-
-    Returns:
-        int: The delta axis
-    """
-    if current_node[0] - new_node[0]:
-        return 0
-    else:
-        return 1
-
 def a_star(
         start_node: coords, 
         end_node: coords, 
@@ -73,7 +61,8 @@ def a_star(
         end_node (tuple of int): goal coordinates.
         array (list of lists): array to pathfind through.
         h_factor (int) : divides the estimated cost by this number.
-        dx (int or float) : real life distance between two cells. Default based on italy map. Grand canyon is about 30.
+        dx (int or float) : real life distance between two cells. 
+                            Default based on italy map. Grand canyon is about 30.
         offroad (bool) : adjusts for offroad time if the itinerary is offroad
     Returns:
         list: list of node coordinates from (including) start_node to (including) end_node.
@@ -89,10 +78,13 @@ def a_star(
     while not nodes_to_explore.empty():
         current_node = nodes_to_explore.get()
         for new_node in directional_array_neighbors(current_node[1], array):
-            axis = axis_finder(current_node[1], new_node)
             new_g_cost = (
                 g_cost[current_node[1]] 
-                + walk_time(array[axis][current_node[1][0], current_node[1][1]], dx)
+                + walk_time(
+                    array[int(not (current_node[1][0] - new_node[0]))]
+                         [current_node[1][0], current_node[1][1]],
+                    dx
+                )
             ) 
             # it's currently quite slow since it computes the cost at every cell.
             # Precomputing the cost wasn't successful in improving performance.  
